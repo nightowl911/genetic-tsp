@@ -1,35 +1,36 @@
 import random
 from tqdm import tqdm
 from Path import Path,n,start
+import math
 
-psize = 600
+psize = 300
+ipsize = psize
 
 population = []
 
 for i in range(psize):
     population.append(Path())
 
+pr = 1
+
 generations = 1
-limit = 300
+limit = 500
 bestScore = 10000000000
 bestPath = list(range(1,n))
 pbar = tqdm(total=limit)
 # pbar.update(1)
 while generations <= limit:
 
-    parents = population[:]
+    parents = population
     matingPool = []
 
-    max_fitness = max(parents, key=lambda x : x.fitness)
-    min_fitness = min(parents, key=lambda x : x.fitness)
-    th = (max_fitness.fitness + min_fitness.fitness) // 2
-    parents.sort(key=lambda x:(1/x.fitness))
-    totalFitness = sum((1/x.fitness) for x in parents)
+    parents.sort(key=lambda x:(x.score))
+    totalFitness = sum(x.score for x in parents)
     # print(totalFitness)
     cumilative = 0
     cumilativeList = []
     for i in parents:
-        cumilative += (1/i.fitness)
+        cumilative += (i.score)
         cumilativeList.append(cumilative/totalFitness)
     # cumilativeList = cumilativeList
     # for i in parents:
@@ -51,7 +52,7 @@ while generations <= limit:
 
     population = []
 
-    while len(population) < (4*(psize//4)):
+    while len(population) < (3*(psize)):
         x = random.random()
         y = random.random()
         i = 0
@@ -86,22 +87,43 @@ while generations <= limit:
             child2 = parents[j].crossover2(parents[i])
             child1.mutate()
             child2.mutate()
+            if pr == 1:
+                print(parents[i].path, sum(parents[i].path))
+                print(parents[j].path, sum(parents[j].path))
+                print(child1.path, sum(child1.path))
+                pr = 0
 
             population.append(child1)
             population.append(child2)
     # print("Population Size: ", len(population))
-    population = population + parents[2*(psize//4):]
-    population.sort(key=lambda x:(1/x.fitness))
+    # population = population + parents[3*(psize//4):]
+    population.sort(key=lambda x:(x.score))
+    # psize = math.ceil(psize+1.001)
+    # print(psize, bestScore)
+    # print(psize)
+    # if pr == 1:
+    #     for i in population:
+    #         print(i.score, end=" ")
+    #     print()
+
     population = population[-psize:]
+    # print(psize, bestScore, len(population))
+
+    # if pr == 1:
+    #     for i in population:
+    #         print(i.score, end=" ")
+    #     print()
+    #     pr = 2
+
 
 
     for i in population:
-        if i.getFitness() < bestScore:
+        if i.fitness < bestScore:
             bestScore = i.fitness
             bestPath = i.path
             # print("---------------Updated---------------")
             # print("Generation: ",generations, "Score:", bestScore);
-            s = "Generation: " + str(generations) + " Score: " + str(bestScore) + " Population: " + str(psize)
+            s = "Generation: " + str(generations) + " Score: " + str(bestScore) #+ " Population: " + str(ipsize) + "->" + str(len(population))
             pbar.set_description(s)
 
     pbar.update(1)
@@ -110,6 +132,8 @@ while generations <= limit:
 
 print()
 print("BestScore: ", bestScore)
+print("Initial Population: ", ipsize)
+print("Final Population: ", psize)
 route = str(start) + ' -> ' + ' -> '.join(str(x) for x in bestPath) + ' -> ' + str(start)
 print("BestPath: ", route)
 
