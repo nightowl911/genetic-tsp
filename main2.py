@@ -1,8 +1,8 @@
 import random
 from tqdm import tqdm
-from Path import Path, n, start, graph
+from Path import Path, n, start
 
-psize = 500
+psize = 300
 
 population = []
 

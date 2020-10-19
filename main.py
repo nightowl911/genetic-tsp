@@ -1,8 +1,8 @@
 import random
 from tqdm import tqdm
-from Path import Path,n,start, graph
+from Path import Path,n,start
 
-psize = 100
+psize = 600
 
 population = []
 
@@ -10,7 +10,7 @@ for i in range(psize):
     population.append(Path())
 
 generations = 1
-limit = 1000
+limit = 300
 bestScore = 10000000000
 bestPath = list(range(1,n))
 pbar = tqdm(total=limit)
@@ -25,12 +25,19 @@ while generations <= limit:
     th = (max_fitness.fitness + min_fitness.fitness) // 2
     parents.sort(key=lambda x:(1/x.fitness))
     totalFitness = sum((1/x.fitness) for x in parents)
+    # print(totalFitness)
     cumilative = 0
     cumilativeList = []
     for i in parents:
         cumilative += (1/i.fitness)
         cumilativeList.append(cumilative/totalFitness)
     # cumilativeList = cumilativeList
+    # for i in parents:
+    #     print(i.fitness, end=" ")
+    # print()
+    # for i in parents:
+    #     print(1/i.fitness, end=" ")
+    # print()
     # print(cumilativeList)
     
     # print(parents[0].fitness)
@@ -44,7 +51,7 @@ while generations <= limit:
 
     population = []
 
-    while len(population) < psize:
+    while len(population) < (4*(psize//4)):
         x = random.random()
         y = random.random()
         i = 0
@@ -54,6 +61,7 @@ while generations <= limit:
                 done = 1
             else:
                 i += 1
+        # print("Random: ", x, "Choosing: ", i, parents[i].fitness)
         j = 0
         done = 0
         while j < len(cumilativeList) and done == 0:
@@ -61,6 +69,7 @@ while generations <= limit:
                 done = 1
             else:
                 j += 1
+        # print("Random: ", y, "Choosing: ", j, parents[j].fitness)
         # print(x.path)
         # print(y.path)
         # if i != j:
@@ -81,6 +90,10 @@ while generations <= limit:
             population.append(child1)
             population.append(child2)
     # print("Population Size: ", len(population))
+    population = population + parents[2*(psize//4):]
+    population.sort(key=lambda x:(1/x.fitness))
+    population = population[-psize:]
+
 
     for i in population:
         if i.getFitness() < bestScore:
@@ -88,7 +101,7 @@ while generations <= limit:
             bestPath = i.path
             # print("---------------Updated---------------")
             # print("Generation: ",generations, "Score:", bestScore);
-            s = "Generation: " + str(generations) + " Score: " + str(bestScore)
+            s = "Generation: " + str(generations) + " Score: " + str(bestScore) + " Population: " + str(psize)
             pbar.set_description(s)
 
     pbar.update(1)
