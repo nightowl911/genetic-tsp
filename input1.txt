@@ -18,11 +18,20 @@
 Optimal Answer: 291
 Output:
 n = 15
-Generation: 716 Score: 291: 100%|██████████| 1000/1000 [00:16<00:00, 58.98it/s]
-Initial Population: 1000
+
 BestScore:  291
-BestPath:  0 -> 10 -> 3 -> 5 -> 7 -> 9 -> 13 -> 11 -> 2 -> 6 -> 4 -> 8 -> 14 -> 1 -> 12 -> 0
+BestPath:  0 -> 12 -> 1 -> 14 -> 8 -> 4 -> 6 -> 2 -> 11 -> 13 -> 9 -> 7 -> 5 -> 3 -> 10 -> 0
+Generation: 33 Score: 291 Population: 200: 100%|██████████| 200/200 [00:00<00:00, 205.79it/s]
 
 BestScore:  291
 BestPath:  0 -> 10 -> 3 -> 5 -> 7 -> 9 -> 13 -> 11 -> 2 -> 6 -> 4 -> 8 -> 14 -> 1 -> 12 -> 0
 Generation: 355 Score: 291: 100%|██████████| 500/500 [00:05<00:00, 93.11it/s]
+
+
+Output from A* using MST Heuristics:
+n = 15
+0 -> 10 -> 3 -> 5 -> 7 -> 9 -> 13 -> 11 -> 2 -> 6 -> 4 -> 8 -> 14 -> 1 -> 12 -> 0
+Total Path Cost: 291
+Time taken : 0.690003 secs
+
+
