@@ -102,6 +102,26 @@ class Path:
         child.getFitness()
         return child
 
+    def crossover3(self, partner):
+        h = random.random()
+        h = random.choice(range(1,n-1))
+        p = list.copy(partner.path)
+        try:
+            for i in range(h, n - 1):
+                p.remove(self.path[i])
+        except Exception as e:
+            print("h: ", h, "n: ", n)
+            # print(h, n-1)
+            print(e)
+            exit()
+        child = Path()
+        child.path = p
+        for i in range(h, n - 1):
+            child.path.append(self.path[i])
+
+        child.fitness = child.getFitness()
+        return child
+
     def mutate(self):
         if random.random() < 0.10:
             x = random.choice(range(0,n-1))
